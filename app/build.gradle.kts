@@ -19,6 +19,13 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // best way is to store in encrypted form in a secure storage like Keystore
+        buildConfigField(
+            type = "String",
+            name = "OPEN_WEATHER_MAP_API_KEY",
+            value = "\"94bfe367de2d918e63542bcaac6d8bce\""
+        )
     }
 
     buildTypes {
@@ -28,23 +35,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
-            // best way is to store in encrypted form in a secure storage like Keystore
-            buildConfigField(
-                "String",
-                "OPEN_WEATHER_MAP_API_KEY",
-                "94bfe367de2d918e63542bcaac6d8bce"
-            )
         }
 
         debug {
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
-            buildConfigField(
-                "String",
-                "OPEN_WEATHER_MAP_API_KEY",
-                "94bfe367de2d918e63542bcaac6d8bce"
-            )
         }
     }
     compileOptions {
