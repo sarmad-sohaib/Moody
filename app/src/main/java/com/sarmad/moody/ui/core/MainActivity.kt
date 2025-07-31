@@ -1,4 +1,4 @@
-package com.sarmad.moody
+package com.sarmad.moody.ui.core
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,8 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
-import com.sarmad.moody.ui.core.BottomNavigation
-import com.sarmad.moody.ui.core.MoodyApp
 import com.sarmad.moody.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
