@@ -2,5 +2,6 @@
     <string name="app_name">moody</string>
     <string name="new_mood_entry">New Mood Entry</string>
     <string name="how_are_you_feeling_today">How are you feeling today?</string>
-    <string name="weather">Weather</string>
+    <string name="weather">Today\'s Weather</string>
+    <string name="save_mood">Save Mood</string>
 </resources>

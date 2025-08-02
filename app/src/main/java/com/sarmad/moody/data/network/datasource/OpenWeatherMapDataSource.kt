@@ -2,6 +2,7 @@ package com.sarmad.moody.data.network.datasource
 
 import android.util.Log
 import com.sarmad.moody.BuildConfig
+import com.sarmad.moody.core.util.toCelsius
 import com.sarmad.moody.data.core.NetworkError
 import com.sarmad.moody.data.core.dto.WeatherResponse
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
@@ -35,7 +36,18 @@ class OpenWeatherMapDataSource @Inject constructor(
                                 tag, "getWeather = ${response.status.value}, " +
                                         "response = ${response.body<WeatherResponse>()}"
                             )
-                            Result.success(value = response.body())
+
+                            val serializedResponse = response.body<WeatherResponse>()
+                            val sanitizedResponse = serializedResponse.copy(
+                                main = serializedResponse.main.copy(
+                                    temp = serializedResponse.main.temp.toCelsius(),
+                                    feelsLike = serializedResponse.main.feelsLike.toCelsius(),
+                                    tempMin = serializedResponse.main.tempMin.toCelsius(),
+                                    tempMax = serializedResponse.main.tempMax.toCelsius()
+                                )
+                            )
+
+                            Result.success(value = sanitizedResponse)
                         } catch (e: Exception) {
                             Result.failure(exception = NetworkError.Parsing(reason = e))
                         }
