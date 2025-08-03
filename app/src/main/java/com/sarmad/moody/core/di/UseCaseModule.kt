@@ -1,6 +1,7 @@
 package com.sarmad.moody.core.di
 
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
+import com.sarmad.moody.domain.preferences.UserPreferencesManager
 import com.sarmad.moody.domain.repository.InsightsRepository
 import com.sarmad.moody.domain.repository.MoodRepository
 import com.sarmad.moody.domain.repository.WeatherRepository
@@ -10,6 +11,10 @@ import com.sarmad.moody.domain.usecase.mood.DefaultGetAllMoodsUseCase
 import com.sarmad.moody.domain.usecase.mood.DefaultInsertMoodUseCase
 import com.sarmad.moody.domain.usecase.mood.GetAllMoodsUseCase
 import com.sarmad.moody.domain.usecase.mood.InsertMoodUseCase
+import com.sarmad.moody.domain.usecase.preference.DefaultGetAppThemeUseCase
+import com.sarmad.moody.domain.usecase.preference.DefaultSetAppThemeUseCase
+import com.sarmad.moody.domain.usecase.preference.GetAppThemeUseCase
+import com.sarmad.moody.domain.usecase.preference.SetAppThemeUseCase
 import com.sarmad.moody.domain.usecase.weather.DefaultGetUniqueWeatherTypesUseCase
 import com.sarmad.moody.domain.usecase.weather.DefaultGetWeatherUseCase
 import com.sarmad.moody.domain.usecase.weather.GetUniqueWeatherTypesUseCase
@@ -74,6 +79,28 @@ class UseCaseModule {
             moodsRepository = moodRepository,
             dispatcherProvider = dispatcherProvider,
             insightsRepository = insightsRepository,
+        )
+    }
+
+    @Provides
+    fun providesGetAppThemeUseCase(
+        userPreferencesManager: UserPreferencesManager,
+        dispatcherProvider: CoroutineDispatcherProvider,
+    ): GetAppThemeUseCase {
+        return DefaultGetAppThemeUseCase(
+            preferencesManager = userPreferencesManager,
+            dispatcherProvider = dispatcherProvider
+        )
+    }
+
+    @Provides
+    fun providesSetAppThemeUseCase(
+        userPreferencesManager: UserPreferencesManager,
+        dispatcherProvider: CoroutineDispatcherProvider,
+    ): SetAppThemeUseCase {
+        return DefaultSetAppThemeUseCase(
+            preferencesManager = userPreferencesManager,
+            dispatcherProvider = dispatcherProvider
         )
     }
 }

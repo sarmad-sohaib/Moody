@@ -16,4 +16,5 @@
     <string name="insights">Insights</string>
     <string name="insights_detail">Based on your mood entries, we\'ve identified some correlations between your mood and the weather conditions at the time of your entries.</string>
     <string name="no_insights_found">No insights found</string>
+    <string name="settings">Settings</string>
 </resources>

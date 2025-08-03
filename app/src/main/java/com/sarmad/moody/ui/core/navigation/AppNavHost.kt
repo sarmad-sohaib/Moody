@@ -1,5 +1,7 @@
 package com.sarmad.moody.ui.core.navigation
 
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -10,13 +12,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sarmad.moody.core.util.toSentenceCase
 import com.sarmad.moody.data.local.entity.Mood
-import com.sarmad.moody.ui.screen.SettingsScreen
 import com.sarmad.moody.ui.screen.addmood.AddMoodScreen
 import com.sarmad.moody.ui.screen.addmood.AddMoodViewModel
 import com.sarmad.moody.ui.screen.history.HistoryScreen
 import com.sarmad.moody.ui.screen.history.MoodHistoryViewModel
 import com.sarmad.moody.ui.screen.insights.InsightsScreen
 import com.sarmad.moody.ui.screen.insights.InsightsViewModel
+import com.sarmad.moody.ui.screen.settings.SettingsScreen
+import com.sarmad.moody.ui.screen.settings.SettingsViewModel
 
 @Composable
 fun AppNavHost(
@@ -63,7 +66,19 @@ fun AppNavHost(
                     }
 
                     Destination.SETTINGS -> {
-                        SettingsScreen()
+                        val settingsViewModel: SettingsViewModel = hiltViewModel(
+                            LocalActivity.current as ComponentActivity
+                        )
+                        val uiState by settingsViewModel.uiState.collectAsState()
+                        SettingsScreen(
+                            uiState = uiState,
+                            onThemeSelected = { theme ->
+                                settingsViewModel.setAppTheme(
+                                    theme = theme
+                                )
+
+                            },
+                        )
                     }
 
                     Destination.ADD_MOOD -> {
