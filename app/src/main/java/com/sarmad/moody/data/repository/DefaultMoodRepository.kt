@@ -15,11 +15,13 @@ class DefaultMoodRepository @Inject constructor(
         return moodLocalDataSource.getMoodById(id)
     }
 
-    override fun getAllMoods() = moodLocalDataSource.getAllMoods()
+    override fun getAllMoodsStream() = moodLocalDataSource.getAllMoodsStream()
 
     override suspend fun deleteMood(mood: Mood) {
         moodLocalDataSource.deleteMood(mood)
     }
 
     override suspend fun getAllWeatherTypes() = moodLocalDataSource.getAllWeatherTypes()
+
+    override fun getAllMoods() = moodLocalDataSource.getAllMoods()
 }

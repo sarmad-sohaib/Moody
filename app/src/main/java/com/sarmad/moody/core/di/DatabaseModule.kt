@@ -17,12 +17,16 @@ object DatabaseModule {
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(
-                context = context,
-                klass = AppDatabase::class.java,
-                name = "moody_database"
-            ).fallbackToDestructiveMigration(false).build()
+            context = context,
+            klass = AppDatabase::class.java,
+            name = "moody_database"
+        ).fallbackToDestructiveMigration(false).build()
 
     @Provides
     @Singleton
     fun provideMoodDao(appDatabase: AppDatabase) = appDatabase.moodDao()
+
+    @Provides
+    @Singleton
+    fun provideWeatherDao(appDatabase: AppDatabase) = appDatabase.weatherDao()
 }

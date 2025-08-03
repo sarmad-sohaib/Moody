@@ -2,6 +2,8 @@ package com.sarmad.moody.core.di
 
 import com.sarmad.moody.data.repository.DefaultMoodRepository
 import com.sarmad.moody.data.repository.DefaultWeatherRepository
+import com.sarmad.moody.data.repository.insight.DefaultInsightsRepository
+import com.sarmad.moody.domain.repository.InsightsRepository
 import com.sarmad.moody.domain.repository.MoodRepository
 import com.sarmad.moody.domain.repository.WeatherRepository
 import dagger.Binds
@@ -26,4 +28,10 @@ abstract class RepositoryModule {
     abstract fun bindsMoodRepository(
         moodRepositoryImpl: DefaultMoodRepository,
     ): MoodRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindsInsightsRepository(
+        defaultInsightsRepository: DefaultInsightsRepository,
+    ): InsightsRepository
 }

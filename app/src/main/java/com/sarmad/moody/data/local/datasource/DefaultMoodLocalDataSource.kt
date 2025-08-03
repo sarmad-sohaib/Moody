@@ -12,9 +12,11 @@ class DefaultMoodLocalDataSource @Inject constructor(
 
     override suspend fun getMoodById(id: String) = moodDao.getMoodById(id)
 
-    override fun getAllMoods() = moodDao.getAllMoods()
+    override fun getAllMoodsStream() = moodDao.getAllMoodsStream()
 
     override suspend fun deleteMood(mood: Mood) = moodDao.deleteMood(mood)
     override suspend fun getAllWeatherTypes(): Flow<List<String>> =
         moodDao.getUniqueWeatherDescriptions()
+
+    override fun getAllMoods() = moodDao.getAllMoods()
 }

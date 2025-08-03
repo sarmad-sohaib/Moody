@@ -1,8 +1,11 @@
 package com.sarmad.moody.core.di
 
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
+import com.sarmad.moody.domain.repository.InsightsRepository
 import com.sarmad.moody.domain.repository.MoodRepository
 import com.sarmad.moody.domain.repository.WeatherRepository
+import com.sarmad.moody.domain.usecase.insights.GetInsightsUseCase
+import com.sarmad.moody.domain.usecase.insights.GetInsightsUseCaseImpl
 import com.sarmad.moody.domain.usecase.mood.DefaultGetAllMoodsUseCase
 import com.sarmad.moody.domain.usecase.mood.DefaultInsertMoodUseCase
 import com.sarmad.moody.domain.usecase.mood.GetAllMoodsUseCase
@@ -58,6 +61,19 @@ class UseCaseModule {
         return DefaultGetUniqueWeatherTypesUseCase(
             moodRepository = moodRepository,
             dispatcherProvider = dispatcherProvider,
+        )
+    }
+
+    @Provides
+    fun providesGetInsightsUseCase(
+        moodRepository: MoodRepository,
+        dispatcherProvider: CoroutineDispatcherProvider,
+        insightsRepository: InsightsRepository,
+    ): GetInsightsUseCase {
+        return GetInsightsUseCaseImpl(
+            moodsRepository = moodRepository,
+            dispatcherProvider = dispatcherProvider,
+            insightsRepository = insightsRepository,
         )
     }
 }

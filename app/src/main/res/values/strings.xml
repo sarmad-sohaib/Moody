@@ -13,4 +13,7 @@
     <string name="filter_weather_types">Weather types to filter mood history</string>
     <string name="mood_history">Mood History</string>
     <string name="no_moods_found">No Mood Found</string>
+    <string name="insights">Insights</string>
+    <string name="insights_detail">Based on your mood entries, we\'ve identified some correlations between your mood and the weather conditions at the time of your entries.</string>
+    <string name="no_insights_found">No insights found</string>
 </resources>

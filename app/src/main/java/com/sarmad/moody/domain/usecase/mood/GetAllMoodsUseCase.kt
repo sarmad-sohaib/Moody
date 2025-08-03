@@ -13,6 +13,6 @@ class DefaultGetAllMoodsUseCase @Inject constructor(
     private val moodRepository: MoodRepository
 ) : GetAllMoodsUseCase {
     override suspend fun invoke(): Flow<List<Mood>> {
-        return moodRepository.getAllMoods()
+        return moodRepository.getAllMoodsStream()
     }
 }

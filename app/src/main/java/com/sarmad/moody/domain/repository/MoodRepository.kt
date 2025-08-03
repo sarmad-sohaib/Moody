@@ -8,9 +8,11 @@ interface MoodRepository {
 
     suspend fun getMoodById(id: String): Mood?
 
-    fun getAllMoods(): Flow<List<Mood>>
+    fun getAllMoodsStream(): Flow<List<Mood>>
 
     suspend fun deleteMood(mood: Mood)
 
     suspend fun getAllWeatherTypes(): Flow<List<String>>
+
+    fun getAllMoods(): List<Mood>
 }

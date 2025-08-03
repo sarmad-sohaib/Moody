@@ -1,12 +1,12 @@
 package com.sarmad.moody.ui.screen.addmood
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sarmad.moody.R
 import com.sarmad.moody.data.core.NetworkError
 import com.sarmad.moody.data.core.dto.WeatherResponse
 import com.sarmad.moody.data.local.entity.Mood
+import com.sarmad.moody.domain.dataholder.Weather
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 data class AddMoodUiState(
     val isLoading: Boolean = false,
-    val weather: WeatherResponse? = null,
+    val weather: Weather? = null,
     val userMsg: Int? = null,
 )
 
@@ -42,21 +42,23 @@ class AddMoodViewModel @Inject constructor(
             addLogUseCaseProvider.getWeatherUseCase(
                 latitude = latitude,
                 longitude = longitude
-            ).onSuccess { weather ->
-                _uiState.update { savedState ->
-                    savedState.copy(
-                        isLoading = false,
-                        weather = weather,
-                        userMsg = null
-                    )
-                }
+            ).collect { weatherResult ->
+                weatherResult.onSuccess { weather ->
+                    _uiState.update { savedState ->
+                        savedState.copy(
+                            isLoading = false,
+                            weather = weather,
+                            userMsg = null
+                        )
+                    }
 
-            }.onFailure { exception ->
-                _uiState.update { savedState ->
-                    savedState.copy(
-                        isLoading = false,
-                        userMsg = exception.getUserReadableError(),
-                    )
+                }.onFailure { exception ->
+                    _uiState.update { savedState ->
+                        savedState.copy(
+                            isLoading = false,
+                            userMsg = exception.getUserReadableError(),
+                        )
+                    }
                 }
             }
         }

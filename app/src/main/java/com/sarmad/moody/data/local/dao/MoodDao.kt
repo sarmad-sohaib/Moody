@@ -17,7 +17,10 @@ interface MoodDao {
     suspend fun getMoodById(id: String): Mood?
 
     @Query(value = "SELECT * FROM Mood")
-    fun getAllMoods(): Flow<List<Mood>>
+    fun getAllMoodsStream(): Flow<List<Mood>>
+
+    @Query(value = "SELECT * FROM Mood")
+    fun getAllMoods(): List<Mood>
 
     @Delete
     suspend fun deleteMood(mood: Mood)

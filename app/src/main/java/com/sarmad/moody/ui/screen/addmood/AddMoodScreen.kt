@@ -36,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sarmad.moody.R
 import com.sarmad.moody.data.core.dto.WeatherResponse
+import com.sarmad.moody.domain.dataholder.Weather
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -51,7 +52,7 @@ fun AddMoodScreen(
         "Anxious",
     ),
     uiState: AddMoodUiState = AddMoodUiState(),
-    onSaveLogButtonClick: (WeatherResponse?, String) -> Unit,
+    onSaveLogButtonClick: (Weather?, String) -> Unit,
     onFetchData: () -> Unit,
     onUserMsgShown: () -> Unit,
 ) {
@@ -144,9 +145,9 @@ fun AddMoodScreen(
         when {
             uiState.weather != null -> {
                 WeatherCard(
-                    temperature = "${uiState.weather.main.temp} C",
-                    location = uiState.weather.name,
-                    description = uiState.weather.weather.firstOrNull()?.description ?: "",
+                    temperature = "${uiState.weather.temperature} C",
+                    location = uiState.weather.location,
+                    description = uiState.weather.description,
                 )
             }
         }

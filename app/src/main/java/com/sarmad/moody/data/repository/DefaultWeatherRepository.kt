@@ -1,21 +1,56 @@
 package com.sarmad.moody.data.repository
 
-import android.util.Log
-import com.sarmad.moody.data.core.dto.WeatherResponse
+import com.sarmad.moody.core.util.isOlderThanOneHour
+import com.sarmad.moody.core.util.toDomain
+import com.sarmad.moody.core.util.toEntity
+import com.sarmad.moody.data.local.datasource.WeatherLocalDataSource
 import com.sarmad.moody.data.network.datasource.WeatherNetworkDataSource
 import com.sarmad.moody.domain.repository.WeatherRepository
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class DefaultWeatherRepository @Inject constructor(
     private val weatherNetworkDataSource: WeatherNetworkDataSource,
+    private val weatherLocalDataSource: WeatherLocalDataSource,
 ) : WeatherRepository {
     override suspend fun getWeather(
         latitude: Double,
         longitude: Double,
-    ): Result<WeatherResponse> {
-        return weatherNetworkDataSource.getWeather(
-            latitude = latitude,
-            longitude = longitude,
-        )
+    ) = flow {
+        weatherLocalDataSource.getWeather().collect { localWeather ->
+            if (localWeather == null) { // weather being loaded very 1st time
+                weatherNetworkDataSource.getWeather(
+                    latitude = latitude,
+                    longitude = longitude,
+                ).onSuccess { weatherResponse ->
+                    emit(
+                        value = Result.success(value = weatherResponse.toDomain())
+                    )
+                    weatherLocalDataSource.saveWeather(
+                        weatherEntity = weatherResponse.toEntity(alreadySavedId = null)
+                    )
+                }
+            } else if (localWeather.updatedAt.isOlderThanOneHour()) {
+                weatherNetworkDataSource.getWeather(
+                    latitude = latitude,
+                    longitude = longitude,
+                ).onSuccess { weatherResponse ->
+                    emit(
+                        value = Result.success(value = weatherResponse.toDomain())
+                    )
+                    weatherLocalDataSource.updateWeather(
+                        weatherEntity = weatherResponse.toEntity(alreadySavedId = localWeather.id)
+                    )
+                }.onFailure {
+                    emit(
+                        value = Result.failure(exception = Throwable(message = it.message))
+                    )
+                }
+            } else {
+                emit(
+                    value = Result.success(value = localWeather.toDomain())
+                )
+            }
+        }
     }
 }

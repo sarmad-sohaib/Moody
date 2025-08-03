@@ -10,12 +10,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sarmad.moody.core.util.toSentenceCase
 import com.sarmad.moody.data.local.entity.Mood
-import com.sarmad.moody.ui.screen.InsightsScreen
 import com.sarmad.moody.ui.screen.SettingsScreen
 import com.sarmad.moody.ui.screen.addmood.AddMoodScreen
 import com.sarmad.moody.ui.screen.addmood.AddMoodViewModel
 import com.sarmad.moody.ui.screen.history.HistoryScreen
 import com.sarmad.moody.ui.screen.history.MoodHistoryViewModel
+import com.sarmad.moody.ui.screen.insights.InsightsScreen
+import com.sarmad.moody.ui.screen.insights.InsightsViewModel
 
 @Composable
 fun AppNavHost(
@@ -51,7 +52,14 @@ fun AppNavHost(
                     }
 
                     Destination.INSIGHTS -> {
-                        InsightsScreen()
+                        val insightsViewModel = hiltViewModel<InsightsViewModel>()
+                        val uiState by insightsViewModel.uiState.collectAsState()
+                        InsightsScreen(
+                            uiState = uiState,
+                            onFetchInsights = {
+                                insightsViewModel.fetchInsights()
+                            }
+                        )
                     }
 
                     Destination.SETTINGS -> {
@@ -73,12 +81,10 @@ fun AppNavHost(
                                 Mood(
                                     mood = mood,
                                     weatherDescription = currentWeather
-                                        ?.weather
-                                        ?.firstOrNull()
                                         ?.description
                                         ?.toSentenceCase()
                                         ?: "",
-                                    moodIcon = currentWeather?.weather?.firstOrNull()?.icon ?: "",
+                                    moodIcon = "",
                                     createdAt = System.currentTimeMillis(),
                                 ).also {
                                     moodViewModel.insertMood(
