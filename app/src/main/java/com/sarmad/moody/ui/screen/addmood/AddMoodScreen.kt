@@ -1,5 +1,6 @@
 package com.sarmad.moody.ui.screen.addmood
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -16,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,23 +41,41 @@ import com.sarmad.moody.data.core.dto.WeatherResponse
 @Composable
 fun AddMoodScreen(
     modifier: Modifier = Modifier,
-    moodsMap: Map<String, Painter> = mapOf(
-        "Happy" to painterResource(R.drawable.ic_happy_24),
-        "Sad" to painterResource(R.drawable.ic_sad_24),
-        "Angry" to painterResource(R.drawable.ic_angry_24),
-        "Bored" to painterResource(R.drawable.ic_bored_24),
-        "Excited" to painterResource(R.drawable.ic_excited_24),
-        "Relaxed" to painterResource(R.drawable.ic_relax_24),
-        "Anxious" to painterResource(R.drawable.ic_anxious_24)
+    moodsMap: List<String> = listOf(
+        "Happy",
+        "Sad",
+        "Angry",
+        "Bored",
+        "Excited",
+        "Relaxed",
+        "Anxious",
     ),
     uiState: AddMoodUiState = AddMoodUiState(),
     onSaveLogButtonClick: (WeatherResponse?, String) -> Unit,
     onFetchData: () -> Unit,
+    onUserMsgShown: () -> Unit,
 ) {
     var selectedMood by rememberSaveable { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         onFetchData()
+    }
+
+    LaunchedEffect(uiState.userMsg != null) {
+        val messageResId = uiState.userMsg
+        messageResId?.let { messageResId ->
+            Toast.makeText(
+                context,
+                context.getString(messageResId), Toast.LENGTH_SHORT
+            ).show()
+            onUserMsgShown()
+        }
+
+        if (messageResId == R.string.mood_saved_successfully) {
+            // Reset the selected mood after saving
+            selectedMood = null
+        }
     }
 
     Column(
@@ -84,13 +103,10 @@ fun AddMoodScreen(
                 .padding(horizontal = 16.dp, vertical = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            moodsMap.entries.forEach { chipLabel ->
-                val label = chipLabel.key
-                val icon: Painter = chipLabel.value
+            moodsMap.forEach { chipLabel ->
                 MoodChip(
-                    label = label,
+                    label = chipLabel,
                     selectedChipLabel = selectedMood,
-                    icon = icon,
                 ) { clickedLabel ->
                     selectedMood = if (selectedMood == clickedLabel) {
                         null // Deselect if already selected
@@ -133,17 +149,6 @@ fun AddMoodScreen(
                     description = uiState.weather.weather.firstOrNull()?.description ?: "",
                 )
             }
-
-            uiState.userMsg != null -> {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    text = uiState.userMsg
-                )
-            }
         }
 
         // dynamic space to push the button to the bottom
@@ -179,7 +184,6 @@ fun AddMoodScreen(
 @Composable
 fun MoodChip(
     label: String,
-    icon: Painter,
     selectedChipLabel: String? = null,
     onClick: (String) -> Unit = {},
 ) {
@@ -191,25 +195,11 @@ fun MoodChip(
         label = {
             Text(
                 text = label,
-                style = if (isSelected) {
-                    MaterialTheme.typography.bodyLarge
-                } else {
+                style =
                     MaterialTheme.typography.bodyMedium
-                }
             )
         },
         selected = isSelected,
-        leadingIcon = if (isSelected) {
-            {
-                Icon(
-                    painter = icon,
-                    contentDescription = "Done icon",
-                    modifier = Modifier.size(FilterChipDefaults.IconSize)
-                )
-            }
-        } else {
-            null
-        },
     )
 }
 
@@ -274,7 +264,6 @@ fun MoodChipPreview() {
     MoodChip(
         label = "Happy",
         selectedChipLabel = "Happy",
-        icon = painterResource(R.drawable.ic_happy_24),
     )
 }
 
@@ -286,5 +275,6 @@ fun AddMoodScreenPreview() {
     AddMoodScreen(
         onSaveLogButtonClick = { _, _ -> },
         onFetchData = {},
+        onUserMsgShown = {},
     )
 }

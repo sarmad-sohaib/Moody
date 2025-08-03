@@ -8,12 +8,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.sarmad.moody.core.util.toSentenceCase
 import com.sarmad.moody.data.local.entity.Mood
-import com.sarmad.moody.ui.screen.HistoryScreen
 import com.sarmad.moody.ui.screen.InsightsScreen
 import com.sarmad.moody.ui.screen.SettingsScreen
 import com.sarmad.moody.ui.screen.addmood.AddMoodScreen
 import com.sarmad.moody.ui.screen.addmood.AddMoodViewModel
+import com.sarmad.moody.ui.screen.history.HistoryScreen
+import com.sarmad.moody.ui.screen.history.MoodHistoryViewModel
 
 @Composable
 fun AppNavHost(
@@ -30,7 +32,22 @@ fun AppNavHost(
             composable(destination.route) {
                 when (destination) {
                     Destination.HISTORY -> {
-                        HistoryScreen()
+                        val moodHistoryViewModel = hiltViewModel<MoodHistoryViewModel>()
+                        val uiState by moodHistoryViewModel.uiState.collectAsState()
+
+                        HistoryScreen(
+                            uiState = uiState,
+                            onFetchData = {
+                                moodHistoryViewModel.getUniqueWeatherTypes()
+                                moodHistoryViewModel.getAllMoods()
+                            },
+                            onFilterSelected = { filter ->
+                                moodHistoryViewModel.updateWeatherFilter(filter = filter)
+                            },
+                            onUserMsgShown = {
+                                moodHistoryViewModel.userMsgShown()
+                            }
+                        )
                     }
 
                     Destination.INSIGHTS -> {
@@ -55,7 +72,11 @@ fun AppNavHost(
                             onSaveLogButtonClick = { currentWeather, mood ->
                                 Mood(
                                     mood = mood,
-                                    weatherDescription = currentWeather?.weather?.firstOrNull()?.description
+                                    weatherDescription = currentWeather
+                                        ?.weather
+                                        ?.firstOrNull()
+                                        ?.description
+                                        ?.toSentenceCase()
                                         ?: "",
                                     moodIcon = currentWeather?.weather?.firstOrNull()?.icon ?: "",
                                     createdAt = System.currentTimeMillis(),
@@ -64,9 +85,9 @@ fun AppNavHost(
                                         mood = it
                                     )
                                 }
-//                                navController.navigate(Destination.HISTORY.route) {
-//                                    popUpTo(Destination.ADD_MOOD.route) { inclusive = true }
-//                                }
+                            },
+                            onUserMsgShown = {
+                                moodViewModel.userMsgShown()
                             }
                         )
                     }

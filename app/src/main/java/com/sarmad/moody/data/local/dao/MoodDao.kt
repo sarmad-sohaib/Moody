@@ -21,4 +21,7 @@ interface MoodDao {
 
     @Delete
     suspend fun deleteMood(mood: Mood)
+
+    @Query("SELECT DISTINCT weatherDescription FROM Mood")
+    fun getUniqueWeatherDescriptions(): Flow<List<String>>
 }

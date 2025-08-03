@@ -3,6 +3,8 @@ package com.sarmad.moody.ui.screen.addmood
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sarmad.moody.R
+import com.sarmad.moody.data.core.NetworkError
 import com.sarmad.moody.data.core.dto.WeatherResponse
 import com.sarmad.moody.data.local.entity.Mood
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
@@ -17,7 +19,7 @@ import javax.inject.Inject
 data class AddMoodUiState(
     val isLoading: Boolean = false,
     val weather: WeatherResponse? = null,
-    val userMsg: String? = null,
+    val userMsg: Int? = null,
 )
 
 @HiltViewModel
@@ -53,7 +55,7 @@ class AddMoodViewModel @Inject constructor(
                 _uiState.update { savedState ->
                     savedState.copy(
                         isLoading = false,
-                        userMsg = exception.message,
+                        userMsg = exception.getUserReadableError(),
                     )
                 }
             }
@@ -70,19 +72,18 @@ class AddMoodViewModel @Inject constructor(
                 copy(
                     moodIcon = getMoodIcon(),
                 ).apply {
-                    Log.d("TAG", "insertMood: $this")
                     addLogUseCaseProvider.addMoodUseCase(
                         mood = this,
                     ).onSuccess {
                         _uiState.update { savedState ->
                             savedState.copy(
-                                userMsg = "Mood added successfully!",
+                                userMsg = R.string.mood_saved_successfully,
                             )
                         }
                     }.onFailure { exception ->
                         _uiState.update { savedState ->
                             savedState.copy(
-                                userMsg = exception.message,
+                                userMsg = exception.getUserReadableError(),
                             )
                         }
                     }
@@ -91,10 +92,19 @@ class AddMoodViewModel @Inject constructor(
         } catch (_: IllegalArgumentException) {
             _uiState.update { savedState ->
                 savedState.copy(
-                    userMsg = "Invalid mood data provided."
+                    userMsg = R.string.mood_saving_error
                 )
             }
         }
+    }
+
+    private fun Throwable.getUserReadableError() = when (this) {
+        is NetworkError.Network -> R.string.network_error
+        is NetworkError.Unauthorized -> R.string.network_error
+        is NetworkError.NotFound -> R.string.weather_not_found_error
+        is NetworkError.Server -> R.string.network_error
+        is NetworkError.Unknown -> R.string.unknown_error
+        else -> R.string.unknown_error
     }
 
     private fun Mood.validateMood() {
@@ -112,5 +122,13 @@ class AddMoodViewModel @Inject constructor(
         "anxious" -> "😟"
         "bored" -> "😒"
         else -> "😶"
+    }
+
+    fun userMsgShown() {
+        _uiState.update { savedState ->
+            savedState.copy(
+                userMsg = null
+            )
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.sarmad.moody.core.di
 
+import com.sarmad.moody.data.local.datasource.DefaultMoodLocalDataSource
+import com.sarmad.moody.data.local.datasource.MoodLocalDataSource
 import com.sarmad.moody.data.network.datasource.OpenWeatherMapDataSource
 import com.sarmad.moody.data.network.datasource.WeatherNetworkDataSource
 import dagger.Binds
@@ -15,4 +17,9 @@ abstract class DataSourceModule {
     abstract fun bindWeatherDataSource(
         impl: OpenWeatherMapDataSource,
     ): WeatherNetworkDataSource
+
+    @Binds
+    abstract fun bindsMoodLocalDataSource(
+        impl: DefaultMoodLocalDataSource,
+    ): MoodLocalDataSource
 }

@@ -2,6 +2,7 @@ package com.sarmad.moody.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.util.Date
 
 @Entity
 data class Mood(
@@ -11,4 +12,10 @@ data class Mood(
     val weatherDescription: String,
     val moodIcon: String,
     val createdAt: Long,
-)
+) {
+    fun toFormattedDate(): String {
+        val date = Date(createdAt)
+        val formatter = java.text.SimpleDateFormat("dd MMM yyyy", java.util.Locale.getDefault())
+        return formatter.format(date)
+    }
+}

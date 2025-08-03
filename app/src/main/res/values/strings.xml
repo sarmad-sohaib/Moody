@@ -4,4 +4,13 @@
     <string name="how_are_you_feeling_today">How are you feeling today?</string>
     <string name="weather">Today\'s Weather</string>
     <string name="save_mood">Save Mood</string>
+    <string name="mood_saved_successfully">Mood saved successfully!</string>
+    <string name="mood_saving_error">"Invalid mood data provided."</string>
+    <string name="network_error">Network Error</string>
+    <string name="weather_not_found_error">Weathre not found for this location</string>
+    <string name="unknown_error">Unkown Error, Please retry</string>
+    <string name="no_weather_types_found">No weather data found!</string>
+    <string name="filter_weather_types">Weather types to filter mood history</string>
+    <string name="mood_history">Mood History</string>
+    <string name="no_moods_found">No Mood Found</string>
 </resources>

@@ -17,10 +17,10 @@ object DatabaseModule {
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(
-            context = context,
-            klass = AppDatabase::class.java,
-            name = "moody_database"
-        ).build()
+                context = context,
+                klass = AppDatabase::class.java,
+                name = "moody_database"
+            ).fallbackToDestructiveMigration(false).build()
 
     @Provides
     @Singleton

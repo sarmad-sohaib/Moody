@@ -1,9 +1,9 @@
-package com.sarmad.moody.domain.repository
+package com.sarmad.moody.data.local.datasource
 
 import com.sarmad.moody.data.local.entity.Mood
 import kotlinx.coroutines.flow.Flow
 
-interface MoodRepository {
+interface MoodLocalDataSource {
     suspend fun insertMood(mood: Mood): Long
 
     suspend fun getMoodById(id: String): Mood?
