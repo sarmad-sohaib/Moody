@@ -62,7 +62,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -71,8 +70,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    testImplementation("app.cash.turbine:turbine:1.2.1")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:2.2.0")
     androidTestImplementation(libs.androidx.junit)
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.4")
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
@@ -105,4 +108,8 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

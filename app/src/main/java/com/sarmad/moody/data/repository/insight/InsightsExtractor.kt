@@ -40,5 +40,4 @@ class MoodInsightsExtractor @Inject constructor() : InsightsExtractor<Mood, Mood
         // Sort by frequency (descending), take top 5
         return insights.sortedByDescending { it.frequency }.take(5)
     }
-
 }
