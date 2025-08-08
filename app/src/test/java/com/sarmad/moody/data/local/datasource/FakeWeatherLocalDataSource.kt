@@ -13,12 +13,12 @@ class FakeWeatherLocalDataSource : WeatherLocalDataSource {
     override fun getWeather(): Flow<WeatherEntity?> = weatherState.asStateFlow()
 
     override suspend fun saveWeather(weatherEntity: WeatherEntity): Long {
-        weatherState.value = weatherEntity
+        weatherState.update { weatherEntity }
         return lastId++
     }
 
     override suspend fun updateWeather(weatherEntity: WeatherEntity) {
-        weatherState.value = weatherEntity
+        weatherState.update { weatherEntity }
     }
 
     // Test utility

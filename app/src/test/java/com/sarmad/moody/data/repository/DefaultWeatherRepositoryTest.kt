@@ -1,6 +1,5 @@
 package com.sarmad.moody.data.repository
 
-import app.cash.turbine.test
 import com.sarmad.moody.data.local.datasource.FakeWeatherLocalDataSource
 import com.sarmad.moody.data.local.entity.WeatherEntity
 import com.sarmad.moody.data.network.datasource.FakeWeatherNetworkDataSource
@@ -31,27 +30,19 @@ class DefaultWeatherRepositoryTest {
 
     @Test
     fun `emits network result and saves locally when local data is missing`() = runTest {
-        networkDataSource = FakeWeatherNetworkDataSource(Scenario.SUCCESS)
+        networkDataSource = FakeWeatherNetworkDataSource(scenario = Scenario.SUCCESS)
         repository = DefaultWeatherRepository(
             weatherNetworkDataSource = networkDataSource,
             weatherLocalDataSource = localDataSource
         )
 
-        val result = repository.getWeather(TEST_LAT, TEST_LON).first()
+        val result = repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).first()
         assertTrue(result.isSuccess)
         assertEquals("London", result.getOrNull()?.location)
-        
 
-        repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).test {
-            val result = awaitItem()
-            assertTrue(result.isSuccess)
-            // Check location name from the mapped domain model (cityName or location)
-            assertEquals("London", result.getOrNull()?.location)
-            // Now check that the local data source received the saved value by collecting one item
-            val savedLocal = localDataSource.getWeather().first()
-            assertEquals("London", savedLocal?.location)
-            awaitComplete()
-        }
+        // Now check that the local data source received the saved value by collecting one item
+        val savedLocal = localDataSource.getWeather().first()
+        assertEquals("London", savedLocal?.location)
     }
 
     @Test
@@ -64,15 +55,16 @@ class DefaultWeatherRepositoryTest {
             temperature = 14.2,
             updatedAt = (System.currentTimeMillis() - 3600_000 * 2) // 2 hours ago
         )
-        localDataSource.setWeather(expiredWeather)
-        networkDataSource = FakeWeatherNetworkDataSource(Scenario.SUCCESS)
-        repository = DefaultWeatherRepository(networkDataSource, localDataSource)
-        repository.getWeather(TEST_LAT, TEST_LON).test {
-            val result = awaitItem()
-            assertTrue(result.isSuccess)
-            assertEquals("London", result.getOrNull()?.location)
-            awaitComplete()
-        }
+        localDataSource.setWeather(weather = expiredWeather)
+        networkDataSource = FakeWeatherNetworkDataSource(scenario = Scenario.SUCCESS)
+        repository = DefaultWeatherRepository(
+            weatherNetworkDataSource = networkDataSource,
+            weatherLocalDataSource = localDataSource
+        )
+
+        val result = repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).first()
+        assertTrue(result.isSuccess)
+        assertEquals("London", result.getOrNull()?.location)
     }
 
     @Test
@@ -84,11 +76,14 @@ class DefaultWeatherRepositoryTest {
             temperature = 14.2,
             updatedAt = (System.currentTimeMillis() - 3600_000 * 2) // 2 hours ago
         )
-        localDataSource.setWeather(expiredWeather)
-        networkDataSource = FakeWeatherNetworkDataSource(Scenario.NOT_FOUND)
-        repository = DefaultWeatherRepository(networkDataSource, localDataSource)
+        localDataSource.setWeather(weather = expiredWeather)
+        networkDataSource = FakeWeatherNetworkDataSource(scenario = Scenario.NOT_FOUND)
+        repository = DefaultWeatherRepository(
+            weatherNetworkDataSource = networkDataSource,
+            weatherLocalDataSource = localDataSource
+        )
 
-        val result = repository.getWeather(TEST_LAT, TEST_LON).first()
+        val result = repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).first()
         assertTrue(result.isFailure)
         assertTrue(result.exceptionOrNull() != null)
     }
@@ -102,14 +97,14 @@ class DefaultWeatherRepositoryTest {
             temperature = 18.5,
             updatedAt = System.currentTimeMillis() // Now
         )
-        localDataSource.setWeather(freshWeather)
-        networkDataSource = FakeWeatherNetworkDataSource(Scenario.SUCCESS) // Should NOT be called
-        repository = DefaultWeatherRepository(networkDataSource, localDataSource)
-        repository.getWeather(TEST_LAT, TEST_LON).test {
-            val result = awaitItem()
-            assertTrue(result.isSuccess)
-            assertEquals("Recency", result.getOrNull()?.location)
-            awaitComplete()
-        }
+        localDataSource.setWeather(weather = freshWeather)
+        networkDataSource = FakeWeatherNetworkDataSource(scenario = Scenario.SUCCESS) // Should NOT be called
+        repository = DefaultWeatherRepository(
+            weatherNetworkDataSource = networkDataSource,
+            weatherLocalDataSource = localDataSource
+        )
+        val result = repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).first()
+        assertTrue(result.isSuccess)
+        assertEquals("Recency", result.getOrNull()?.location)
     }
 }

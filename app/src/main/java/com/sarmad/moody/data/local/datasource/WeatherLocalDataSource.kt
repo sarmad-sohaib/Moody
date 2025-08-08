@@ -18,8 +18,10 @@ class RoomWeatherLocalDataSource @Inject constructor(
 ) : WeatherLocalDataSource {
     override fun getWeather() = weatherDao.getWeather()
 
-    override suspend fun saveWeather(weatherEntity: WeatherEntity) =
-        weatherDao.insertWeather(weather = weatherEntity)
+    override suspend fun saveWeather(weatherEntity: WeatherEntity): Long {
+        println("repoDone = calledSaveWeather = $weatherEntity")
+        return weatherDao.insertWeather(weather = weatherEntity)
+    }
 
     override suspend fun updateWeather(weatherEntity: WeatherEntity) =
         weatherDao.updateWeather(weather = weatherEntity)
