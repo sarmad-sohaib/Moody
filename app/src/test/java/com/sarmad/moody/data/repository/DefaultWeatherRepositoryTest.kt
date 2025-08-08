@@ -1,5 +1,6 @@
 package com.sarmad.moody.data.repository
 
+import com.sarmad.moody.core.util.FakeTimeProvider
 import com.sarmad.moody.data.local.datasource.FakeWeatherLocalDataSource
 import com.sarmad.moody.data.local.entity.WeatherEntity
 import com.sarmad.moody.data.network.datasource.FakeWeatherNetworkDataSource
@@ -17,6 +18,7 @@ class DefaultWeatherRepositoryTest {
     private lateinit var networkDataSource: FakeWeatherNetworkDataSource
     private lateinit var localDataSource: FakeWeatherLocalDataSource
     private lateinit var repository: DefaultWeatherRepository
+    private lateinit var fakeTimeProvider: FakeTimeProvider
 
     companion object {
         private const val TEST_LAT = 51.5074
@@ -26,6 +28,7 @@ class DefaultWeatherRepositoryTest {
     @BeforeEach
     fun setup() {
         localDataSource = FakeWeatherLocalDataSource()
+        fakeTimeProvider = FakeTimeProvider()
     }
 
     @Test
@@ -33,7 +36,8 @@ class DefaultWeatherRepositoryTest {
         networkDataSource = FakeWeatherNetworkDataSource(scenario = Scenario.SUCCESS)
         repository = DefaultWeatherRepository(
             weatherNetworkDataSource = networkDataSource,
-            weatherLocalDataSource = localDataSource
+            weatherLocalDataSource = localDataSource,
+            timeProvider = fakeTimeProvider,
         )
 
         val result = repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).first()
@@ -59,7 +63,8 @@ class DefaultWeatherRepositoryTest {
         networkDataSource = FakeWeatherNetworkDataSource(scenario = Scenario.SUCCESS)
         repository = DefaultWeatherRepository(
             weatherNetworkDataSource = networkDataSource,
-            weatherLocalDataSource = localDataSource
+            weatherLocalDataSource = localDataSource,
+            timeProvider = fakeTimeProvider,
         )
 
         val result = repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).first()
@@ -80,7 +85,8 @@ class DefaultWeatherRepositoryTest {
         networkDataSource = FakeWeatherNetworkDataSource(scenario = Scenario.NOT_FOUND)
         repository = DefaultWeatherRepository(
             weatherNetworkDataSource = networkDataSource,
-            weatherLocalDataSource = localDataSource
+            weatherLocalDataSource = localDataSource,
+            timeProvider = fakeTimeProvider,
         )
 
         val result = repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).first()
@@ -98,10 +104,12 @@ class DefaultWeatherRepositoryTest {
             updatedAt = System.currentTimeMillis() // Now
         )
         localDataSource.setWeather(weather = freshWeather)
-        networkDataSource = FakeWeatherNetworkDataSource(scenario = Scenario.SUCCESS) // Should NOT be called
+        networkDataSource =
+            FakeWeatherNetworkDataSource(scenario = Scenario.SUCCESS) // Should NOT be called
         repository = DefaultWeatherRepository(
             weatherNetworkDataSource = networkDataSource,
-            weatherLocalDataSource = localDataSource
+            weatherLocalDataSource = localDataSource,
+            timeProvider = fakeTimeProvider,
         )
         val result = repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).first()
         assertTrue(result.isSuccess)

@@ -14,7 +14,7 @@ interface MoodDao {
     suspend fun insertMood(mood: Mood): Long
 
     @Query(value = "SELECT * FROM Mood WHERE id = :id")
-    suspend fun getMoodById(id: String): Mood?
+    suspend fun getMoodById(id: Int): Mood?
 
     @Query(value = "SELECT * FROM Mood")
     fun getAllMoodsStream(): Flow<List<Mood>>

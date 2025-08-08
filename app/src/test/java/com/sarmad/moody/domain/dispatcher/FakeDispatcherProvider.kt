@@ -1,13 +1,15 @@
 package com.sarmad.moody.domain.dispatcher
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.invoke
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestCoroutineScheduler
 
 class FakeDispatcherProvider(
-    private val dispatcher: CoroutineDispatcher = StandardTestDispatcher(),
+    private val scheduler: TestCoroutineScheduler,
 ) : CoroutineDispatcherProvider {
-    override val main: CoroutineDispatcher = dispatcher
-    override val io: CoroutineDispatcher = dispatcher
-    override val default: CoroutineDispatcher = dispatcher
-    override val unconfined: CoroutineDispatcher = dispatcher
+    override val main: CoroutineDispatcher = StandardTestDispatcher(scheduler)
+    override val io: CoroutineDispatcher = StandardTestDispatcher(scheduler)
+    override val default: CoroutineDispatcher = StandardTestDispatcher(scheduler)
+    override val unconfined: CoroutineDispatcher = StandardTestDispatcher(scheduler)
 }

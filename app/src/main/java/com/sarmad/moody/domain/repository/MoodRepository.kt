@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 interface MoodRepository {
     suspend fun insertMood(mood: Mood): Long
 
-    suspend fun getMoodById(id: String): Mood?
+    suspend fun getMoodById(id: Int): Mood?
 
     fun getAllMoodsStream(): Flow<List<Mood>>
 

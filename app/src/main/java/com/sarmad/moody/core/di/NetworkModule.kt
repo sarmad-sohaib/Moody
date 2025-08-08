@@ -9,6 +9,7 @@ import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 import javax.inject.Singleton
 
 @Module
@@ -21,7 +22,7 @@ object NetworkModule {
         engineFactory = Android
     ) {
         install(plugin = ContentNegotiation) {
-            json()
+            json(Json { ignoreUnknownKeys = true })
         }
 
         install(plugin = HttpTimeout) {

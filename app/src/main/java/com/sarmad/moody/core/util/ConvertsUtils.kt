@@ -16,8 +16,11 @@ fun WeatherEntity.toDomain() = Weather(
     description = description
 )
 
-fun WeatherResponse.toEntity(alreadySavedId: Int?) = WeatherEntity(
-    updatedAt = System.currentTimeMillis(),
+fun WeatherResponse.toEntity(
+    alreadySavedId: Int?,
+    currentTimeInMillis: Long,
+) = WeatherEntity(
+    updatedAt = currentTimeInMillis,
     id = alreadySavedId ?: 1,
     location = name,
     temperature = main.temp,

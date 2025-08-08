@@ -10,7 +10,7 @@ class DefaultMoodLocalDataSource @Inject constructor(
 ) : MoodLocalDataSource {
     override suspend fun insertMood(mood: Mood) = moodDao.insertMood(mood)
 
-    override suspend fun getMoodById(id: String) = moodDao.getMoodById(id)
+    override suspend fun getMoodById(id: Int) = moodDao.getMoodById(id)
 
     override fun getAllMoodsStream() = moodDao.getAllMoodsStream()
 

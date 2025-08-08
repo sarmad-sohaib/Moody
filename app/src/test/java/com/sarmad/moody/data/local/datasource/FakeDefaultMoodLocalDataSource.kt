@@ -19,8 +19,8 @@ class FakeDefaultMoodLocalDataSource : MoodLocalDataSource {
         return id
     }
 
-    override suspend fun getMoodById(id: String): Mood? {
-        return moodsData.find { it.id.toString() == id }
+    override suspend fun getMoodById(id: Int): Mood? {
+        return moodsData.find { it.id == id }
     }
 
     override fun getAllMoodsStream(): Flow<List<Mood>> {

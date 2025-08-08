@@ -19,7 +19,6 @@ class RoomWeatherLocalDataSource @Inject constructor(
     override fun getWeather() = weatherDao.getWeather()
 
     override suspend fun saveWeather(weatherEntity: WeatherEntity): Long {
-        println("repoDone = calledSaveWeather = $weatherEntity")
         return weatherDao.insertWeather(weather = weatherEntity)
     }
 

@@ -1,5 +1,6 @@
 package com.sarmad.moody.data.repository
 
+import com.sarmad.moody.core.util.TimeProvider
 import com.sarmad.moody.core.util.isOlderThanOneHour
 import com.sarmad.moody.core.util.toDomain
 import com.sarmad.moody.core.util.toEntity
@@ -12,6 +13,7 @@ import javax.inject.Inject
 class DefaultWeatherRepository @Inject constructor(
     private val weatherNetworkDataSource: WeatherNetworkDataSource,
     private val weatherLocalDataSource: WeatherLocalDataSource,
+    private val timeProvider: TimeProvider,
 ) : WeatherRepository {
     override suspend fun getWeather(
         latitude: Double,
@@ -24,7 +26,10 @@ class DefaultWeatherRepository @Inject constructor(
                     longitude = longitude,
                 ).onSuccess { weatherResponse ->
                     weatherLocalDataSource.saveWeather(
-                        weatherEntity = weatherResponse.toEntity(alreadySavedId = null)
+                        weatherEntity = weatherResponse.toEntity(
+                            alreadySavedId = null,
+                            currentTimeInMillis = timeProvider.currentTimeMillis()
+                        )
                     )
                     emit(
                         value = Result.success(value = weatherResponse.toDomain())
@@ -39,7 +44,10 @@ class DefaultWeatherRepository @Inject constructor(
                         value = Result.success(value = weatherResponse.toDomain())
                     )
                     weatherLocalDataSource.updateWeather(
-                        weatherEntity = weatherResponse.toEntity(alreadySavedId = localWeather.id)
+                        weatherEntity = weatherResponse.toEntity(
+                            alreadySavedId = localWeather.id,
+                            currentTimeInMillis = timeProvider.currentTimeMillis()
+                        )
                     )
                 }.onFailure {
                     emit(

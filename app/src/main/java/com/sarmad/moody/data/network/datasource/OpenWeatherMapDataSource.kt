@@ -1,6 +1,5 @@
 package com.sarmad.moody.data.network.datasource
 
-import android.util.Log
 import com.sarmad.moody.BuildConfig
 import com.sarmad.moody.core.util.toCelsius
 import com.sarmad.moody.data.core.NetworkError
@@ -17,9 +16,6 @@ class OpenWeatherMapDataSource @Inject constructor(
     private val dispatcherProvider: CoroutineDispatcherProvider,
     private val httpClient: HttpClient,
 ) : WeatherNetworkDataSource {
-
-    private val tag = OpenWeatherMapDataSource::class.java.simpleName
-
     override suspend fun getWeather(latitude: Double, longitude: Double): Result<WeatherResponse> =
         withContext(dispatcherProvider.io) {
             try {
@@ -32,11 +28,6 @@ class OpenWeatherMapDataSource @Inject constructor(
                 when (response.status.value) {
                     in 200..299 -> {
                         try {
-                            Log.d(
-                                tag, "getWeather = ${response.status.value}, " +
-                                        "response = ${response.body<WeatherResponse>()}"
-                            )
-
                             val serializedResponse = response.body<WeatherResponse>()
                             val sanitizedResponse = serializedResponse.copy(
                                 main = serializedResponse.main.copy(
@@ -46,9 +37,9 @@ class OpenWeatherMapDataSource @Inject constructor(
                                     tempMax = serializedResponse.main.tempMax.toCelsius()
                                 )
                             )
-
                             Result.success(value = sanitizedResponse)
                         } catch (e: Exception) {
+                            println("parsingError = ${e.message}")
                             Result.failure(exception = NetworkError.Parsing(reason = e))
                         }
                     }
@@ -65,3 +56,4 @@ class OpenWeatherMapDataSource @Inject constructor(
             }
         }
 }
+

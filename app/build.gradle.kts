@@ -90,7 +90,7 @@ dependencies {
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.client.content.negotiation)
     implementation(libs.ktor.serialization.kotlinx.json)
-
+    testImplementation("io.ktor:ktor-client-mock:3.2.3")
     // serialization
     implementation(libs.kotlinx.serialization.json)
 
