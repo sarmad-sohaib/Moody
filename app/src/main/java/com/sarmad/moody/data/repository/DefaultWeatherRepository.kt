@@ -23,11 +23,11 @@ class DefaultWeatherRepository @Inject constructor(
                     latitude = latitude,
                     longitude = longitude,
                 ).onSuccess { weatherResponse ->
-                    emit(
-                        value = Result.success(value = weatherResponse.toDomain())
-                    )
                     weatherLocalDataSource.saveWeather(
                         weatherEntity = weatherResponse.toEntity(alreadySavedId = null)
+                    )
+                    emit(
+                        value = Result.success(value = weatherResponse.toDomain())
                     )
                 }
             } else if (localWeather.updatedAt.isOlderThanOneHour()) {
