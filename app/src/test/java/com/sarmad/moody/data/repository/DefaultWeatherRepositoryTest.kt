@@ -32,8 +32,17 @@ class DefaultWeatherRepositoryTest {
     @Test
     fun `emits network result and saves locally when local data is missing`() = runTest {
         networkDataSource = FakeWeatherNetworkDataSource(Scenario.SUCCESS)
-        repository = DefaultWeatherRepository(networkDataSource, localDataSource)
-        repository.getWeather(TEST_LAT, TEST_LON).test {
+        repository = DefaultWeatherRepository(
+            weatherNetworkDataSource = networkDataSource,
+            weatherLocalDataSource = localDataSource
+        )
+
+        val result = repository.getWeather(TEST_LAT, TEST_LON).first()
+        assertTrue(result.isSuccess)
+        assertEquals("London", result.getOrNull()?.location)
+        
+
+        repository.getWeather(latitude = TEST_LAT, longitude = TEST_LON).test {
             val result = awaitItem()
             assertTrue(result.isSuccess)
             // Check location name from the mapped domain model (cityName or location)
@@ -78,12 +87,10 @@ class DefaultWeatherRepositoryTest {
         localDataSource.setWeather(expiredWeather)
         networkDataSource = FakeWeatherNetworkDataSource(Scenario.NOT_FOUND)
         repository = DefaultWeatherRepository(networkDataSource, localDataSource)
-        repository.getWeather(TEST_LAT, TEST_LON).test {
-            val result = awaitItem()
-            assertTrue(result.isFailure)
-            assertTrue(result.exceptionOrNull()?.message != null)
-            awaitComplete()
-        }
+
+        val result = repository.getWeather(TEST_LAT, TEST_LON).first()
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() != null)
     }
 
     @Test

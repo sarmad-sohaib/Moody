@@ -4,6 +4,7 @@ import com.sarmad.moody.data.local.entity.WeatherEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class FakeWeatherLocalDataSource : WeatherLocalDataSource {
     private val weatherState = MutableStateFlow<WeatherEntity?>(null)
@@ -22,6 +23,6 @@ class FakeWeatherLocalDataSource : WeatherLocalDataSource {
 
     // Test utility
     fun setWeather(weather: WeatherEntity?) {
-        weatherState.value = weather
+        weatherState.update { weather }
     }
 }
