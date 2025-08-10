@@ -1,7 +1,7 @@
 package com.sarmad.moody.domain.usecase.mood
 
-import com.sarmad.moody.data.local.entity.Mood
-import com.sarmad.moody.data.repository.FakeMoodRepository
+import com.sarmad.moody.data.local.entity.mood.Mood
+import com.sarmad.moody.data.repository.mood.FakeMoodRepository
 import com.sarmad.moody.domain.dispatcher.FakeDispatcherProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest

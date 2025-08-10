@@ -1,7 +1,7 @@
 package com.sarmad.moody.data.repository.insight
 
-import com.sarmad.moody.data.local.entity.Mood
-import com.sarmad.moody.domain.dataholder.MoodInsight
+import com.sarmad.moody.data.local.entity.mood.Mood
+import com.sarmad.moody.domain.model.mood.MoodInsight
 import javax.inject.Inject
 
 interface InsightsExtractor<T, R> {

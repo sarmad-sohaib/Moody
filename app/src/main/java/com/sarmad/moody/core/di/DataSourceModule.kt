@@ -1,11 +1,11 @@
 package com.sarmad.moody.core.di
 
-import com.sarmad.moody.data.local.datasource.DefaultMoodLocalDataSource
-import com.sarmad.moody.data.local.datasource.MoodLocalDataSource
-import com.sarmad.moody.data.local.datasource.RoomWeatherLocalDataSource
-import com.sarmad.moody.data.local.datasource.WeatherLocalDataSource
-import com.sarmad.moody.data.network.datasource.OpenWeatherMapDataSource
-import com.sarmad.moody.data.network.datasource.WeatherNetworkDataSource
+import com.sarmad.moody.data.local.datasource.mood.DefaultMoodLocalDataSource
+import com.sarmad.moody.data.local.datasource.mood.MoodLocalDataSource
+import com.sarmad.moody.data.local.datasource.weather.RoomWeatherLocalDataSource
+import com.sarmad.moody.data.local.datasource.weather.WeatherLocalDataSource
+import com.sarmad.moody.data.network.datasource.weather.OpenWeatherMapDataSource
+import com.sarmad.moody.data.network.datasource.weather.WeatherNetworkDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

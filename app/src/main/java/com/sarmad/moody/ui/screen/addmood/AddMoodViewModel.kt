@@ -3,11 +3,12 @@ package com.sarmad.moody.ui.screen.addmood
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sarmad.moody.R
-import com.sarmad.moody.data.core.NetworkError
-import com.sarmad.moody.data.core.dto.WeatherResponse
-import com.sarmad.moody.data.local.entity.Mood
-import com.sarmad.moody.domain.dataholder.Weather
+import com.sarmad.moody.data.core.errortype.NetworkError
+import com.sarmad.moody.data.local.entity.mood.Mood
+import com.sarmad.moody.domain.model.weather.Weather
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
+import com.sarmad.moody.domain.usecase.mood.InsertMoodUseCase
+import com.sarmad.moody.domain.usecase.weather.GetWeatherUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,8 +25,9 @@ data class AddMoodUiState(
 
 @HiltViewModel
 class AddMoodViewModel @Inject constructor(
-    private val addLogUseCaseProvider: AddLogUseCaseProvider,
     private val dispatcherProvider: CoroutineDispatcherProvider,
+    val addMoodUseCase: InsertMoodUseCase,
+    val getWeatherUseCase: GetWeatherUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(value = AddMoodUiState())
@@ -39,7 +41,7 @@ class AddMoodViewModel @Inject constructor(
                 )
             }
 
-            addLogUseCaseProvider.getWeatherUseCase(
+            getWeatherUseCase(
                 latitude = latitude,
                 longitude = longitude
             ).collect { weatherResult ->
@@ -51,7 +53,6 @@ class AddMoodViewModel @Inject constructor(
                             userMsg = null
                         )
                     }
-
                 }.onFailure { exception ->
                     _uiState.update { savedState ->
                         savedState.copy(
@@ -74,7 +75,7 @@ class AddMoodViewModel @Inject constructor(
                 copy(
                     moodIcon = getMoodIcon(),
                 ).apply {
-                    addLogUseCaseProvider.addMoodUseCase(
+                    addMoodUseCase(
                         mood = this,
                     ).onSuccess {
                         _uiState.update { savedState ->

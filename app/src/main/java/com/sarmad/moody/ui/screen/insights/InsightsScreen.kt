@@ -1,5 +1,7 @@
 package com.sarmad.moody.ui.screen.insights
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,12 +28,25 @@ import com.sarmad.moody.R
 @Composable
 fun InsightsScreen(
     modifier: Modifier = Modifier,
+    context: Context = LocalContext.current,
     uiState: InsightsUiState = InsightsUiState(),
     onFetchInsights: () -> Unit,
+    onUserMsgShown: () -> Unit,
 ) {
 
     LaunchedEffect(Unit) {
         onFetchInsights()
+    }
+
+    LaunchedEffect(uiState.userMsg != null) {
+        val messageResId = uiState.userMsg
+        messageResId?.let { messageResId ->
+            Toast.makeText(
+                context,
+                context.getString(messageResId), Toast.LENGTH_SHORT
+            ).show()
+            onUserMsgShown()
+        }
     }
 
     Column(
@@ -118,6 +134,7 @@ fun InsightsScreenPreview() {
                 "You are usually neutral on cloudy days",
             )
         ),
-        onFetchInsights = {}
+        onFetchInsights = {},
+        onUserMsgShown = {}
     )
 }

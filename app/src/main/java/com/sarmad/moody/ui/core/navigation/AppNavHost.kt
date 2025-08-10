@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sarmad.moody.core.util.toSentenceCase
-import com.sarmad.moody.data.local.entity.Mood
+import com.sarmad.moody.data.local.entity.mood.Mood
 import com.sarmad.moody.ui.screen.addmood.AddMoodScreen
 import com.sarmad.moody.ui.screen.addmood.AddMoodViewModel
 import com.sarmad.moody.ui.screen.history.HistoryScreen
@@ -61,6 +61,9 @@ fun AppNavHost(
                             uiState = uiState,
                             onFetchInsights = {
                                 insightsViewModel.fetchInsights()
+                            },
+                            onUserMsgShown = {
+                                insightsViewModel.userMsgShown()
                             }
                         )
                     }

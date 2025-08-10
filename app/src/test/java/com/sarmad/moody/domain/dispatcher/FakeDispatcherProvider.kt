@@ -6,7 +6,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 
 class FakeDispatcherProvider(
-    private val scheduler: TestCoroutineScheduler,
+    scheduler: TestCoroutineScheduler,
 ) : CoroutineDispatcherProvider {
     override val main: CoroutineDispatcher = StandardTestDispatcher(scheduler)
     override val io: CoroutineDispatcher = StandardTestDispatcher(scheduler)

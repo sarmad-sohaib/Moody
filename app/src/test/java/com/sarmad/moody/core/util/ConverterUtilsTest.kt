@@ -3,7 +3,7 @@ package com.sarmad.moody.core.util
 import com.sarmad.moody.data.core.dto.Main
 import com.sarmad.moody.data.core.dto.Weather
 import com.sarmad.moody.data.core.dto.WeatherResponse
-import com.sarmad.moody.data.local.entity.WeatherEntity
+import com.sarmad.moody.data.local.entity.weather.WeatherEntity
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -13,7 +13,9 @@ class ConverterUtilsTest {
 
     @BeforeEach
     fun setup() {
-        testTimeProvider = FakeTimeProvider()
+        testTimeProvider = FakeTimeProvider(
+            isFixedTime = true
+        )
     }
 
     @Test

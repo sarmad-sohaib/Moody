@@ -1,7 +1,7 @@
 package com.sarmad.moody.domain.usecase.weather
 
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
-import com.sarmad.moody.domain.repository.MoodRepository
+import com.sarmad.moody.domain.repository.mood.MoodRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject

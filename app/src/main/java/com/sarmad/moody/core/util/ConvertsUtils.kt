@@ -1,8 +1,8 @@
 package com.sarmad.moody.core.util
 
 import com.sarmad.moody.data.core.dto.WeatherResponse
-import com.sarmad.moody.data.local.entity.WeatherEntity
-import com.sarmad.moody.domain.dataholder.Weather
+import com.sarmad.moody.data.local.entity.weather.WeatherEntity
+import com.sarmad.moody.domain.model.weather.Weather
 
 fun WeatherResponse.toDomain() = Weather(
     location = name,

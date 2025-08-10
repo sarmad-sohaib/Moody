@@ -1,6 +1,6 @@
 package com.sarmad.moody.data.repository.insight
 
-import com.sarmad.moody.domain.dataholder.MoodInsight
+import com.sarmad.moody.domain.model.mood.MoodInsight
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -57,6 +57,7 @@ class MoodInsightsExtractorTest {
                 frequency = 2
             )
         )
+        println(expected)
         // Order within same frequency might vary, so we compare sets
         assertEquals(expected.toSet(), insights.toSet())
     }

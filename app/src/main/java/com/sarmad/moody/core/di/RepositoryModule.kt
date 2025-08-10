@@ -1,11 +1,11 @@
 package com.sarmad.moody.core.di
 
-import com.sarmad.moody.data.repository.DefaultMoodRepository
-import com.sarmad.moody.data.repository.DefaultWeatherRepository
+import com.sarmad.moody.data.repository.mood.DefaultMoodRepository
+import com.sarmad.moody.data.repository.weather.DefaultWeatherRepository
 import com.sarmad.moody.data.repository.insight.DefaultInsightsRepository
-import com.sarmad.moody.domain.repository.InsightsRepository
-import com.sarmad.moody.domain.repository.MoodRepository
-import com.sarmad.moody.domain.repository.WeatherRepository
+import com.sarmad.moody.domain.repository.insights.InsightsRepository
+import com.sarmad.moody.domain.repository.mood.MoodRepository
+import com.sarmad.moody.domain.repository.weather.WeatherRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

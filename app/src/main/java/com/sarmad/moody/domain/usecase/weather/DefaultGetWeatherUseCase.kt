@@ -1,6 +1,6 @@
 package com.sarmad.moody.domain.usecase.weather
 
-import com.sarmad.moody.domain.repository.WeatherRepository
+import com.sarmad.moody.domain.repository.weather.WeatherRepository
 import javax.inject.Inject
 
 class DefaultGetWeatherUseCase @Inject constructor(

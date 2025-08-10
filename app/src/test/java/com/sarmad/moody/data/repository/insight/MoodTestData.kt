@@ -1,6 +1,6 @@
 package com.sarmad.moody.data.repository.insight
 
-import com.sarmad.moody.data.local.entity.Mood
+import com.sarmad.moody.data.local.entity.mood.Mood
 
 object MoodTestData {
     val emptyList = emptyList<Mood>()

@@ -1,8 +1,8 @@
 package com.sarmad.moody.domain.usecase.mood
 
-import com.sarmad.moody.data.local.entity.Mood
+import com.sarmad.moody.data.local.entity.mood.Mood
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
-import com.sarmad.moody.domain.repository.MoodRepository
+import com.sarmad.moody.domain.repository.mood.MoodRepository
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

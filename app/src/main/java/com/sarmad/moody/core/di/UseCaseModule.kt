@@ -2,9 +2,9 @@ package com.sarmad.moody.core.di
 
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
 import com.sarmad.moody.domain.preferences.UserPreferencesManager
-import com.sarmad.moody.domain.repository.InsightsRepository
-import com.sarmad.moody.domain.repository.MoodRepository
-import com.sarmad.moody.domain.repository.WeatherRepository
+import com.sarmad.moody.domain.repository.insights.InsightsRepository
+import com.sarmad.moody.domain.repository.mood.MoodRepository
+import com.sarmad.moody.domain.repository.weather.WeatherRepository
 import com.sarmad.moody.domain.usecase.insights.GetInsightsUseCase
 import com.sarmad.moody.domain.usecase.insights.GetInsightsUseCaseImpl
 import com.sarmad.moody.domain.usecase.mood.DefaultGetAllMoodsUseCase

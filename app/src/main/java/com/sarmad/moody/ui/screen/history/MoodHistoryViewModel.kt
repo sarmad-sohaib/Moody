@@ -3,8 +3,8 @@ package com.sarmad.moody.ui.screen.history
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sarmad.moody.R
-import com.sarmad.moody.core.Constants
-import com.sarmad.moody.data.local.entity.Mood
+import com.sarmad.moody.core.util.Constants
+import com.sarmad.moody.data.local.entity.mood.Mood
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
 import com.sarmad.moody.domain.usecase.mood.GetAllMoodsUseCase
 import com.sarmad.moody.domain.usecase.weather.GetUniqueWeatherTypesUseCase

@@ -22,14 +22,14 @@ class InsightsViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     fun fetchInsights() = viewModelScope.launch(context = dispatchersProviders.io) {
+        _uiState.update { savedState ->
+            savedState.copy(
+                isLoading = true,
+            )
+        }
         val insights = getInsightsUseCase()
 
         if (insights.isEmpty()) {
-            _uiState.update { savedState ->
-                savedState.copy(
-                    isLoading = true,
-                )
-            }
             _uiState.update { savedState ->
                 savedState.copy(
                     isLoading = false,
@@ -46,6 +46,14 @@ class InsightsViewModel @Inject constructor(
                     userMsg = null,
                 )
             }
+        }
+    }
+
+    fun userMsgShown() {
+        _uiState.update { savedState ->
+            savedState.copy(
+                userMsg = null
+            )
         }
     }
 }

@@ -1,10 +1,9 @@
 package com.sarmad.moody.domain.usecase.insights
 
-import com.sarmad.moody.data.local.entity.Mood
-import com.sarmad.moody.domain.dataholder.MoodInsight
+import com.sarmad.moody.domain.model.mood.MoodInsight
 import com.sarmad.moody.domain.dispatcher.CoroutineDispatcherProvider
-import com.sarmad.moody.domain.repository.InsightsRepository
-import com.sarmad.moody.domain.repository.MoodRepository
+import com.sarmad.moody.domain.repository.insights.InsightsRepository
+import com.sarmad.moody.domain.repository.mood.MoodRepository
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
