@@ -7,6 +7,7 @@ weather and mood correlation, such as "You are mostly happy on rainy days."
 ## Table of Contents
 
 - [Project Overview](#project-overview)
+- [Assumptions](#assumptions)
 - [Features](#features)
 - [Tech Stack & Architecture](#tech-stack--architecture)
 - [Getting Started](#getting-started)
@@ -22,6 +23,11 @@ weather and mood correlation, such as "You are mostly happy on rainy days."
 ## Project Overview
 
 Moody is an Android application for logging daily moods alongside current weather information. It allows users to browse their mood history and view simple insights, such as correlations between mood and weather (e.g., "You are mostly happy on rainy days"). The app is built with a modern tech stack, emphasizing clean architecture, Room, and a UI constructed with Jetpack Compose. It leverages Kotlin, Hilt for dependency injection, and Ktor for network operations. The project serves as a showcase for contemporary Android development and testing practices.
+
+## Assumptions
+
+Here are some assumption taken into accoount while developing this project:
+- **Location Permission:** Assumed that user has given location permission. Didn’t asked for simplecity. Instead, test latitued and longitudes are used to load weather data.
 
 ## Features
 
@@ -67,7 +73,8 @@ layers:
   infrastructure and features.
 - **[Coroutines](https://kotlinlang.org/docs/coroutines-overview.html):** A concurrency design
   pattern that you can use on Android to simplify code that executes asynchronously.
-- **[Turbine](https://github.com/cashapp/turbine):** For testing of Kotlin Flows. Not all Flows are tested via Turbine, just in scenarios     where manually testing them is difficult like test immediate state change.
+- **[Turbine](https://github.com/cashapp/turbine):** For testing of Kotlin Flows. Not all Flows are tested via Turbine, just in scenarios where manually testing them is difficult like test immediate state change.
+- **[Junit 5](https://docs.junit.org/current/user-guide/):** Used to test buisniss logic accross app.
 
 ## Getting Started
 
