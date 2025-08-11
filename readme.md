@@ -120,7 +120,7 @@ The signed APK will be located in the `app/build/outputs/apk/release` directory.
 To run the unit tests, execute the following Gradle command:
 
 ```bash
-./gradlew testDebugUnitTest
+/gradlew :app:testDebugUnitTest
 ```
 
 The test results will be available in the `app/build/reports/tests/testDebugUnitTest` directory.
