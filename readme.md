@@ -27,7 +27,7 @@ Moody is an Android application for logging daily moods alongside current weathe
 ## Assumptions
 
 Here are some assumption taken into accoount while developing this project:
-- **Location Permission:** Assumed that user has given location permission. Didn’t asked for simplecity. Instead, test latitued and longitudes are used to load weather data.
+- **Location Permission:** Assumed that user has given location permission. Didn’t asked for simplicity. Instead, test latitued and longitudes are used to load weather data.
 
 ## Features
 
