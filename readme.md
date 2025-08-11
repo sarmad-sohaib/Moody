@@ -1,8 +1,8 @@
 # Moody: A Modern Android Application
 
-**Moody** - An android app which enables users to log daily mood with current weather information,
+**Moody** - An Android app that enables users to log their daily mood with current weather information,
 navigate through mood log history, and see minimal Insights about
-weather and mood correlation such as "You are mostly happy on rainy days."
+weather and mood correlation, such as "You are mostly happy on rainy days."
 
 ## Table of Contents
 
@@ -17,36 +17,25 @@ weather and mood correlation such as "You are mostly happy on rainy days."
     - [Building for Release](#building-for-release)
 - [Testing](#testing)
     - [Unit Tests](#unit-tests)
-    - [UI Tests](#ui-tests)
 - [Code Style](#code-style)
-- [Contributing](#contributing)
-- [Troubleshooting](#troubleshooting)
 
 ## Project Overview
 
-Moody is a simple yet comprehensive application that showcases how to build a modern Android app
-using a Clean Architecture approach. It demonstrates the integration of various Jetpack libraries
-and other popular open-source tools to create a feature-rich and resilient user experience. The app
-fetches data from a remote API, stores it locally for offline access, and presents it to the user in
-a clean and intuitive UI.
+Moody is an Android application for logging daily moods alongside current weather information. It allows users to browse their mood history and view simple insights, such as correlations between mood and weather (e.g., "You are mostly happy on rainy days"). The app is built with a modern tech stack, emphasizing clean architecture, Room, and a UI constructed with Jetpack Compose. It leverages Kotlin, Hilt for dependency injection, and Ktor for network operations. The project serves as a showcase for contemporary Android development and testing practices.
 
 ## Features
 
-- **Offline-first:** The app is designed to work seamlessly with or without a network connection.
-- **Clean Architecture:** The codebase is organized into `data`, `domain`, and `ui` layers,
-  promoting separation of concerns and testability.
-- **Modern UI:** The UI is built entirely with Jetpack Compose, providing a declarative and reactive
-  approach to UI development.
-- **Dependency Injection:** Hilt is used for managing dependencies, making the code more modular and
-  easier to test.
-- **Asynchronous Operations:** Kotlin Coroutines are used for managing background threads and
-  asynchronous tasks.
-
+- **Mood Logging:** The User can log mood, and current weather data is logged automatically with mood.
+- **Weather Data Loading:** App loads weather data from [OpenWeatherMap Api](https://openweathermap.org/api).
+- **Weather Data Caching:** Caches weather data in local database for 1 hour after loading, to reduce network usage and API calls.
+- **Mood History:** User can see mood hsitory and filter mood history by weather types, such as (Rainy, Sunny, etc.)
+- **Mood Insights:** User can see minimal mood insights based on the logged mood data and weather data, such as "You are mostly happy on Sunny Days."
+- **Day/Night Theme Support** User can switch Day/Night themes and their choice is persisted accross sesstions.
 ## Tech Stack & Architecture
 
 ### Architecture
 
-This project follows the **Clean Architecture** principles, which separates the code into three main
+This project follows the **Clean Architecture** principles, which separate the code into three main
 layers:
 
 - **Domain Layer:** Contains the core business logic of the application, including use cases,
@@ -61,7 +50,7 @@ layers:
 
 - **[Kotlin](https://kotlinlang.org/):** The official programming language for Android development.
 - **[Jetpack Compose](https://developer.android.com/jetpack/compose):** A modern toolkit for
-  building native Android UI.
+  building native Android UI via declerative approach.
 - **[Hilt](https://dagger.dev/hilt/):** A dependency injection library for Android that reduces the
   boilerplate of doing manual dependency injection in your project.
 - **[ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel):** A class
@@ -78,12 +67,13 @@ layers:
   infrastructure and features.
 - **[Coroutines](https://kotlinlang.org/docs/coroutines-overview.html):** A concurrency design
   pattern that you can use on Android to simplify code that executes asynchronously.
+- **[Turbine](https://github.com/cashapp/turbine):** For testing of Kotlin Flows. Not all Flows are tested via Turbine, just in scenarios     where manually testing them is difficult like test immediate state change.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Android Studio Iguana | 2023.2.1 or later
+- Android Studio Narwahal - Latest Version
 - JDK 11 or later
 - Android SDK 34 or later
 
@@ -128,32 +118,9 @@ To run the unit tests, execute the following Gradle command:
 
 The test results will be available in the `app/build/reports/tests/testDebugUnitTest` directory.
 
-### UI Tests
-
-To run the UI tests, you need a connected device or an emulator. Execute the following Gradle
-command:
-
-```bash
-./gradlew connectedDebugAndroidTest
-```
-
-The test results will be available in the `app/build/reports/androidTests/connected` directory.
 
 ## Code Style
 
 This project follows the
 official [Kotlin style guide](https://kotlinlang.org/docs/coding-conventions.html). The code is also
 formatted using the default Android Studio code style settings.
-
-## Contributing
-
-Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue
-or submit a pull request.
-
-## Troubleshooting
-
-- **Build fails with a "Could not resolve all files for configuration" error:** This usually means
-  that some dependencies could not be downloaded. Make sure you have a stable internet connection
-  and try to sync the project with Gradle files again.
-- **App crashes on launch:** Check the Logcat in Android Studio for any error messages. The most
-  common cause is a missing API key or a network-related issue.
