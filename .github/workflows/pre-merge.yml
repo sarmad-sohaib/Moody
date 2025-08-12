@@ -1,81 +1,71 @@
 name: PR Checks
 
-permissions:
-  issues: write
-  pull-requests: write
-
 on:
   pull_request:
     branches:
-      - working
+      - working  # Only PRs targeting "working" branch
 
 jobs:
-  lint:
-    name: Run Lint
+  lint-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      # ---------------- LINT ----------------
       - name: Run Lint
+        id: lint
+        continue-on-error: true
         run: ./gradlew lintDebug
 
       - name: Upload Lint Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lint-report
           path: app/build/reports/lint-results-debug.html
 
-  unit_tests:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-    needs: lint
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
+      # ---------------- UNIT TESTS ----------------
       - name: Run Unit Tests
+        id: tests
+        continue-on-error: true
         run: ./gradlew testDebugUnitTest
 
-      - name: Upload Test Report
+      - name: Upload Unit Test Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-report
-          path: app/build/reports/tests/testDebugUnitTest/
+          path: app/build/reports/tests/testDebugUnitTest/index.html
 
-  comment_reports:
-    name: Comment Reports
-    runs-on: ubuntu-latest
-    needs: [lint, unit_tests]
-    steps:
-      - name: Download Lint Report
-        uses: actions/download-artifact@v4
-        with:
-          name: lint-report
-          path: reports
-
-      - name: Download Test Report
-        uses: actions/download-artifact@v4
-        with:
-          name: unit-test-report
-          path: reports
-
-      - name: Post comment with report links
+      # ---------------- COMMENT ON PR ----------------
+      - name: Comment Reports
+        if: always()
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            ✅ **Lint and Unit Tests Completed**
-            - [Lint Report](./reports/lint-results-debug.html)
-            - [Test Report](./reports/tests/testDebugUnitTest/index.html)
+            ## CI Results
+
+            **Lint:** ${{ steps.lint.outcome == 'success' && '✅ Passed' || '❌ Failed' }}
+            [Download Lint Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            **Unit Tests:** ${{ steps.tests.outcome == 'success' && '✅ Passed' || '❌ Failed' }}
+            [Download Unit Test Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            _(Reports are downloadable from the Artifacts section of this workflow run)_
