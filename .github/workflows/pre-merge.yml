@@ -73,3 +73,17 @@ jobs:
             [Download Unit Test Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
             _(Reports are downloadable from the Artifacts section of this workflow run)_
+
+      # ---------------- CHECK OVERALL STATUS ----------------
+      - name: Check Lint and Test Outcomes
+        if: always() # Ensures this step runs to check outcomes
+        run: |
+          echo "Lint step outcome: ${{ steps.lint.outcome }}"
+          echo "Test step outcome: ${{ steps.tests.outcome }}"
+          if [ "${{ steps.lint.outcome }}" == "failure" ] || \
+             [ "${{ steps.tests.outcome }}" == "failure" ]; then
+            echo "::error::Lint check or Unit Tests failed. Marking job as failed."
+            exit 1
+          else
+            echo "Lint and Unit Tests passed successfully."
+          fi
