@@ -71,6 +71,7 @@ jobs:
 
             **Unit Tests:** ${{ steps.tests.outcome == 'success' && '✅ Passed' || '❌ Failed' }}
             [Download Unit Test Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            Download report from above link and open **index.html**
 
             _(Reports are downloadable from the Artifacts section of this workflow run)_
 
