@@ -11,16 +11,7 @@ class MoodInsightsExtractorTest {
     @Test
     fun `extractInsights with empty list returns empty list`() {
         val insights = extractor.extractInsights(data = MoodTestData.emptyList)
-        assertEquals(
-            listOf<MoodInsight>(
-                MoodInsight(
-                    summary = "You are usually on Sunny days",
-                    mood = "",
-                    weather = "Sunny",
-                    frequency = 0
-                )
-            ), insights
-        )
+        assertEquals(emptyList<MoodInsight>(), insights)
     }
 
     @Test
