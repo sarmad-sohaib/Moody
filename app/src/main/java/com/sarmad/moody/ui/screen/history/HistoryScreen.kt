@@ -109,8 +109,6 @@ fun HistoryScreen(
                 style = MaterialTheme.typography.titleMedium
             )
 
-            // Placeholder for your list of mood entries
-            // This list should be filtered based on uiState.selectedWeatherFilter
             Text(
                 text = "Selected Filter: ${uiState.selectedWeatherFilter}",
                 modifier = Modifier
@@ -132,7 +130,6 @@ fun HistoryScreen(
                 }
             }
 
-            // Call onFetchData, perhaps in a LaunchedEffect
             LaunchedEffect(Unit) {
                 onFetchData()
             }

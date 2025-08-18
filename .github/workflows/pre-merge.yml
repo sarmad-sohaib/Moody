@@ -7,7 +7,7 @@ permissions:
 on:
   pull_request:
     branches:
-      - working  # Only PRs targeting "working" branch
+      - working
 
 jobs:
   lint-and-test:
