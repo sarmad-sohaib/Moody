@@ -34,20 +34,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload Debug APK
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: debug-apk
           path: app/build/outputs/apk/debug/app-debug.apk
-
-      - name: Post Build Result in PR
-        if: always()
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          message: |
-            ## Post-Merge Build (Working Branch)
-            **Build Status:** ${{ steps.build.outcome == 'success' && '✅ Passed' || '❌ Failed' }}
-
-            ${{ steps.build.outcome == 'success' &&
-            format('[Download Debug APK](https://github.com/{0}/actions/runs/{1})', github.repository, github.run_id) ||
-            'Debug APK not available due to build failure.' }}
