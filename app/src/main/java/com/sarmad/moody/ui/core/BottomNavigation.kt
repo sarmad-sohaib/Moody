@@ -31,13 +31,9 @@ fun BottomNavigation(
 ) {
     var selectedDestination by rememberSaveable { mutableIntStateOf(startDestination.ordinal) }
 
-    // This state tracks the *actual current route* from the NavController
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
 
-    // Update selectedDestinationIndex when the route changes due to navigation
-    // This ensures the bottom bar highlights the correct tab even with deep links or programmatic navigation
-    // And also helps in our back handling logic
     LaunchedEffect(currentRoute) {
         currentRoute?.let { route ->
             val matchingDestination =
@@ -56,16 +52,14 @@ fun BottomNavigation(
                     NavigationBarItem(
                         selected = selectedDestination == index,
                         onClick = {
-                            // It ensures that when you click a tab, you either navigate to its start destination
-                            // or pop up to it if you're already in its stack, and it saves the back stack.
                             navController.navigate(destination.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true // Save state of popped destinations
+                                    saveState = true
                                 }
                                 launchSingleTop =
-                                    true // Avoid multiple copies of the same destination
+                                    true
                                 restoreState =
-                                    true // Restore state if navigating to a previously visited destination
+                                    true
                             }
                         },
                         icon = {
@@ -81,19 +75,13 @@ fun BottomNavigation(
         }
     ) { innerPadding ->
 
-        // Custom Back Handling Logic
-        BackHandler(enabled = true) { // Always enabled when this Scaffold is active
+        BackHandler(enabled = true) {
             val currentSelectedTabStartRoute = Destination.entries[selectedDestination].route
 
             if (currentRoute == currentSelectedTabStartRoute) {
-                // If we are on the start destination of the currently selected tab
                 if (currentRoute == startDestination.route) {
-                    // And this tab is also the overall start destination of the BottomNavigation,
-                    // call the onBackFromStartDestination callback (e.g., to finish activity or navigate up)
                     onBackFromStartDestination()
                 } else {
-                    // If this tab is NOT the overall start destination,
-                    // navigate to the overall start destination tab.
                     navController.navigate(startDestination.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
                             saveState = true
@@ -101,25 +89,14 @@ fun BottomNavigation(
                         launchSingleTop = true
                         restoreState = true
                     }
-                    // Update the selected index to the overall start destination
                     selectedDestination = startDestination.ordinal
                 }
             } else {
-                // If we are deeper in the back stack of the current tab,
-                // simply pop the back stack.
-                // If the pop takes us to a different tab's screen, the LaunchedEffect
-                // will update selectedDestinationIndex.
-                // If pop takes us to the start destination of the current tab, the next back press
-                // will be handled by the logic above.
                 if (!navController.popBackStack()) {
-                    // If popBackStack returns false, it means there's nothing to pop,
-                    // which shouldn't happen if currentRoute != currentSelectedTabStartRoute.
-                    // As a fallback, or if this is the very root, call onBackFromStartDestination.
                     onBackFromStartDestination()
                 }
             }
         }
-
 
         AppNavHost(
             modifier = Modifier.padding(paddingValues = innerPadding),
