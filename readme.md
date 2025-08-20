@@ -18,6 +18,9 @@ weather and mood correlation, such as "You are mostly happy on rainy days."
     - [Building for Release](#building-for-release)
 - [Testing](#testing)
     - [Unit Tests](#unit-tests)
+- [Continuous Integration (CI) Workflows](#continuous-integration-ci-workflows)
+    - [Pre-Merge Checks](#pre-merge-checks)
+    - [Debug APK Build (on `working` branch)](#debug-apk-build-on-working-branch)
 - [Code Style](#code-style)
 
 ## Project Overview
@@ -120,11 +123,59 @@ The signed APK will be located in the `app/build/outputs/apk/release` directory.
 To run the unit tests, execute the following Gradle command:
 
 ```bash
-/gradlew :app:testDebugUnitTest
+./gradlew :app:testDebugUnitTest
 ```
 
 The test results will be available in the `app/build/reports/tests/testDebugUnitTest` directory.
 
+## Continuous Integration (CI) Workflows
+
+This project utilizes GitHub Actions to automate various CI tasks. The workflows are defined in the `.github/workflows` directory.
+
+### Pre-Merge Checks (`pre-merge.yml`)
+
+This workflow is designed to ensure code quality and stability before merging changes into the `main` branch.
+
+**Triggers:**
+
+-   On pull requests targeting the `main` branch.
+
+**Key Jobs & Steps:**
+
+1.  **`lint-and-test` Job:**
+    -   **Checkout Code:** Fetches the latest code from the repository.
+    -   **Setup JDK:** Configures the Java Development Kit (version 17).
+    -   **Setup Gradle Cache:** Caches Gradle dependencies to speed up subsequent builds.
+    -   **Run Lint:** Executes `./gradlew lintDebug` to perform static code analysis. This step uses `continue-on-error: true` to ensure that reports are generated even if lint issues are found.
+    -   **Upload Lint Report:** Uploads the HTML lint report (`app/build/reports/lint-results-debug.html`) as a workflow artifact named `lint-report`.
+    -   **Run Unit Tests:** Executes `./gradlew testDebugUnitTest` to run all unit tests in the `app` module. This step also uses `continue-on-error: true` to ensure reports are generated regardless of test outcomes.
+    -   **Upload Unit Test Report:** Uploads the entire unit test report directory (`app/build/reports/tests/testDebugUnitTest/`) as a workflow artifact named `unit-test-report`. This includes `index.html` and all associated assets.
+    -   **Comment Reports on PR:** Posts a sticky comment on the pull request. The comment includes:
+        -   The outcome (success/failure) of the Lint and Unit Test steps.
+        -   Direct links to the workflow run page where the uploaded `lint-report` and `unit-test-report` artifacts can be downloaded.
+    -   **Check Lint and Test Outcomes:** A crucial step that explicitly checks the `outcome` of the "Run Lint" and "Run Unit Tests" steps. If either of these steps failed (even if `continue-on-error` was true), this step will execute `exit 1`, causing the entire `lint-and-test` job to be marked as "failed". This ensures that the GitHub check associated with the workflow fails if there are lint issues or test failures, preventing merges if branch protection rules are set accordingly.
+
+**Purpose:** This workflow helps maintain code quality by automatically running linters and unit tests on every proposed change to the `main` branch. It provides direct feedback on the pull request with links to detailed reports, and critically, it ensures that the PR check accurately reflects the status of these quality gates.
+
+### Debug APK Build (on `working` branch) (`debug-apk-on-working-push.yml`)
+
+This workflow automates the process of building a debug APK whenever changes are pushed to the `working` branch. This is useful for testing, internal distribution, or quick validation of changes on a development branch.
+
+**Triggers:**
+
+-   On any push to the `working` branch.
+
+**Key Jobs & Steps:**
+
+1.  **`build-debug-apk` Job:**
+    -   **Checkout Code:** Fetches the latest code.
+    -   **Setup JDK:** Configures JDK 17.
+    -   **Setup Gradle Cache:** Caches Gradle dependencies.
+    -   **Build Debug APK:** Executes `./gradlew assembleDebug` to compile the debug version of the application. The step has an `id: build_apk` to reference its outcome.
+    -   **Upload Debug APK:** Uploads the generated `app-debug.apk` (located at `app/build/outputs/apk/debug/app-debug.apk`) as a workflow artifact. The artifact is named `debug-apk-${{ github.sha }}` to include the commit SHA for easy identification and uniqueness. Artifacts are retained for 7 days.
+    -   **Check Build Outcome:** This final step checks the `outcome` of the "Build Debug APK" step. If the APK build failed, this step executes `exit 1`, causing the `build-debug-apk` job (and thus the workflow run) to be marked as "failed".
+
+**Purpose:** This workflow streamlines the generation of debug builds from the `working` branch, providing quick access to installable APKs and giving feedback directly on associated pull requests about the build status.
 
 ## Code Style
 
