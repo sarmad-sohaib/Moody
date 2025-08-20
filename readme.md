@@ -173,11 +173,6 @@ This workflow automates the process of building a debug APK whenever changes are
     -   **Setup Gradle Cache:** Caches Gradle dependencies.
     -   **Build Debug APK:** Executes `./gradlew assembleDebug` to compile the debug version of the application. The step has an `id: build_apk` to reference its outcome.
     -   **Upload Debug APK:** Uploads the generated `app-debug.apk` (located at `app/build/outputs/apk/debug/app-debug.apk`) as a workflow artifact. The artifact is named `debug-apk-${{ github.sha }}` to include the commit SHA for easy identification and uniqueness. Artifacts are retained for 7 days.
-    -   **Find Associated Pull Request:** Uses the `jwalton/gh-find-current-pr@v1` action to identify if the push event is associated with an open pull request.
-    -   **Comment on PR:** If an associated pull request is found:
-        -   Posts or updates a sticky comment (header: `debug-apk-build-status-working-branch`) on the PR.
-        -   The comment indicates the success or failure of the debug APK build.
-        -   If successful, it includes a link to the GitHub Actions workflow run page where the `debug-apk` artifact can be downloaded.
     -   **Check Build Outcome:** This final step checks the `outcome` of the "Build Debug APK" step. If the APK build failed, this step executes `exit 1`, causing the `build-debug-apk` job (and thus the workflow run) to be marked as "failed".
 
 **Purpose:** This workflow streamlines the generation of debug builds from the `working` branch, providing quick access to installable APKs and giving feedback directly on associated pull requests about the build status.
