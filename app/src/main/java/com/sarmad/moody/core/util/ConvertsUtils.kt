@@ -4,6 +4,7 @@ import com.sarmad.moody.data.core.dto.WeatherResponse
 import com.sarmad.moody.data.local.entity.weather.WeatherEntity
 import com.sarmad.moody.domain.model.weather.Weather
 
+// Excellent: Idiomatically written util functions for Kotlin
 fun WeatherResponse.toDomain() = Weather(
     location = name,
     temperature = main.temp,

@@ -1,3 +1,4 @@
+Excellent: structure, information and coverage
 # Moody: A Modern Android Application
 
 **Moody** - An Android app that enables users to log their daily mood with current weather information,

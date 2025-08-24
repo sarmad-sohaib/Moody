@@ -22,6 +22,7 @@ import org.junit.jupiter.api.assertNotNull
 @OptIn(ExperimentalCoroutinesApi::class)
 class AddMoodViewModelTest {
 
+    // excellent: tests testing only and only view model, both in names and in functionality
     private lateinit var dispatcherProvider: FakeDispatcherProvider
     private lateinit var insertMoodUseCase: FakeInsertMoodUseCase
     private lateinit var getWeatherUseCase: FakeGetWeatherUseCase

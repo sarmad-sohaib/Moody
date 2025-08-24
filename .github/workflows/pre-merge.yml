@@ -1,5 +1,6 @@
 name: PR Checks
 
+# excellent: covers important checks, writes good output, structured very well
 permissions:
   issues: write
   pull-requests: write

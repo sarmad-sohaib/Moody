@@ -8,6 +8,7 @@ interface InsightsExtractor<T, R> {
     fun extractInsights(data: List<T>): List<R>
 }
 
+// Average: This is all domain logic
 class MoodInsightsExtractor @Inject constructor() : InsightsExtractor<Mood, MoodInsight> {
     override fun extractInsights(data: List<Mood>): List<MoodInsight> {
         return generateMoodWeatherInsights(moods = data)
@@ -25,7 +26,7 @@ class MoodInsightsExtractor @Inject constructor() : InsightsExtractor<Mood, Mood
 
         val insights = moodWeatherCounts.mapNotNull { (weather, moodMap) ->
             val mostFrequentMoodEntry = moodMap.maxByOrNull { it.value }
-            if (mostFrequentMoodEntry != null && mostFrequentMoodEntry.value >= 2) {
+            if (mostFrequentMoodEntry != null && mostFrequentMoodEntry.value >= 2) { // Bad: Magic number
                 val mood = mostFrequentMoodEntry.key
                 val count = mostFrequentMoodEntry.value
                 MoodInsight(

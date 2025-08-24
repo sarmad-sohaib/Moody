@@ -1,3 +1,4 @@
+// Excellent: structure of the file
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -23,6 +24,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         // best way is to store in encrypted form in a secure storage like Keystore
+        // Good: This is fine here
         buildConfigField(
             type = "String",
             name = "OPEN_WEATHER_MAP_API_KEY",
@@ -32,6 +34,7 @@ android {
 
     buildTypes {
         release {
+            // Average: This should be true but fine for assignment
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -40,6 +43,7 @@ android {
         }
 
         debug {
+            // Good: post-fixing debug builds
             applicationIdSuffix = ".debug"
             versionNameSuffix = "-debug"
         }
@@ -62,6 +66,7 @@ android {
 }
 
 dependencies {
+    // Good: version catalogue is used
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

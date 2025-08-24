@@ -12,7 +12,7 @@ interface MoodRepository {
 
     suspend fun deleteMood(mood: Mood)
 
-    suspend fun getAllWeatherTypes(): Flow<List<String>>
+    suspend fun getAllWeatherTypes(): Flow<List<String>> // Weird: Why is this a part of mood repo
 
     fun getAllMoods(): List<Mood>
 }

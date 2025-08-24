@@ -1,5 +1,6 @@
 name: Build Debug APK on Working Branch Push
 
+# Good: Overall workflow, simple and works
 on:
   push:
     branches:

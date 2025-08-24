@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
+// Excellent: Navigation management
 object Routes {
     const val SETTINGS = "settings"
     const val ADD_MOOD = "add_mood"

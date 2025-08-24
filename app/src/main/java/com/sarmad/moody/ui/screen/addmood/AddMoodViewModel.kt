@@ -17,12 +17,14 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 import javax.inject.Inject
 
+// Excellent: use of UI states with compose
 data class AddMoodUiState(
     val isLoading: Boolean = false,
     val weather: Weather? = null,
     val userMsg: Int? = null,
 )
 
+// Excellent: view model, how it is handling results and doing only what is expected of it
 @HiltViewModel
 class AddMoodViewModel @Inject constructor(
     private val dispatcherProvider: CoroutineDispatcherProvider,
@@ -117,7 +119,7 @@ class AddMoodViewModel @Inject constructor(
     }
 
     private fun Mood.getMoodIcon() = when (mood.lowercase(Locale.ROOT)) {
-        "happy" -> "😊"
+        "happy" -> "😊" // bad: moods should be an enum to be used everywhere instead of strings
         "sad" -> "😢"
         "angry" -> "😠"
         "neutral" -> "😐"

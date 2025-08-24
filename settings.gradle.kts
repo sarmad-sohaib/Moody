@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "moody"
 include(":app")
- 
+// Good: Kotlin DSL is used for gradle files

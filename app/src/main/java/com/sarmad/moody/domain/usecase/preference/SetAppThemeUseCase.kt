@@ -5,6 +5,7 @@ import com.sarmad.moody.domain.preferences.AppTheme
 import com.sarmad.moody.domain.preferences.UserPreferencesManager
 import kotlinx.coroutines.withContext
 
+// Excellent: Interfaces for all usecases
 interface SetAppThemeUseCase {
     suspend operator fun invoke(
         appTheme: AppTheme,
