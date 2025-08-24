@@ -21,11 +21,13 @@ class DefaultInsertMoodUseCase @Inject constructor(
         val savedMoodId = moodRepository.insertMood(mood = mood)
 
         savedMoodId.takeIf {
-            it != -1L
+            it != -1L // bad: Magic number  (repo should return an error or throw in case of failure)
         }?.let {
             Result.success(value = it)
         } ?: run {
             Result.failure(
+                // Good: An exception with custom message is thrown
+                // Average: Base Exception is thrown instead of a custom or more specific exception
                 exception = Throwable(
                     message = "Failed to insert mood with id: $savedMoodId"
                 )

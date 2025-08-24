@@ -8,6 +8,7 @@ class MoodInsightsExtractorTest {
 
     private val extractor = MoodInsightsExtractor()
 
+    // good: coverage of edge cases
     @Test
     fun `extractInsights with empty list returns empty list`() {
         val insights = extractor.extractInsights(data = MoodTestData.emptyList)
